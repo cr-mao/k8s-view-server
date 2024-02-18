@@ -8,7 +8,7 @@ import (
 
 // RegisterAPIRoutes 注册网页相关路由
 func RegisterAPIRoutes(r *gin.Engine) {
-	loginController := &controllers.AdminLoginController{}
-	//登录
-	r.POST("/admin/user/login", loginController.Login)
+	tmpController := &controllers.TmpController{}
+	//PodList 测试
+	r.POST("/kubernetes/pod_list", tmpController.PodList)
 }

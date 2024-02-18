@@ -23,4 +23,6 @@ func Bootstrap(env string) {
 	time.Local = cstZone
 	// logger 初始化
 	SetupLogger()
+	// k8s  初始化
+	SetUpK8S()
 }

@@ -19,7 +19,6 @@ package errcode
   | ErrMysqlServer          | 10010101 | 500        |  Mysql server error      （mysql 服务错误)       |
   | ErrMysqlSQL             | 10010102 | 500        |  Illegal SQL               (sql 代码错误）       |
   | ErrRedisServer          | 10010201 | 500        |  Redis server error        （redis 服务错误）    |
-  | ErrBusiness             | 10019001 | 200        |     业务限制                                    |
 
 客户端要关心的是http code 是     ErrParams  400 ，ErrAuthenticationHeader 401，ErrAuthentication 401，ErrPermission 403, ErrTooFast 429
 当返回http code= 401 时，   ErrAuthenticationHeader,ErrAuthentication 根据具体Code 去区分处理
@@ -44,10 +43,6 @@ type errCodes struct {
 	ErrMysqlServer          ErrCode
 	ErrMysqlSQL             ErrCode
 	ErrRedisServer          ErrCode
-	ErrBusiness             ErrCode
-	ErrAppVersionIsTooSmall ErrCode
-	ErrUseOldAppVersion     ErrCode
-	ErrServerIsOff          ErrCode
 }
 
 var ErrCodes = errCodes{
@@ -111,25 +106,5 @@ var ErrCodes = errCodes{
 		Code:     10010201,
 		HTTPCode: 500,
 		Desc:     "Redis server error",
-	},
-	ErrBusiness: ErrCode{
-		Code:     10019001,
-		HTTPCode: 200,
-		Desc:     "business error",
-	},
-	ErrAppVersionIsTooSmall: ErrCode{
-		Code:     10019020,
-		HTTPCode: 200,
-		Desc:     "客户端版本太低",
-	},
-	ErrUseOldAppVersion: ErrCode{
-		Code:     10019021,
-		HTTPCode: 200,
-		Desc:     "请使用新的版本",
-	},
-	ErrServerIsOff: ErrCode{
-		Code:     10019022,
-		HTTPCode: 200,
-		Desc:     "已停服",
 	},
 }
