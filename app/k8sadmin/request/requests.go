@@ -15,9 +15,10 @@ import (
 type ValidatorFunc func(interface{}, *gin.Context) map[string][]string
 
 // Validate 控制器里调用示例：
-//        if ok := requests.Validate(c, &requests.UserSaveRequest{}, requests.UserSave); !ok {
-//            return
-//        }
+//
+//	if ok := requests.Validate(c, &requests.UserSaveRequest{}, requests.UserSave); !ok {
+//	    return
+//	}
 func Validate(c *gin.Context, obj interface{}, handler ValidatorFunc) bool {
 
 	//  1. 解析请求，ShouldBind 支持 JSON 数据、表单请求和 URL Query, ShouldBindJSON 支持json

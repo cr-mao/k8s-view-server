@@ -18,7 +18,7 @@ func setup404Handler(r *gin.Engine) {
 	})
 }
 
-//全局中间件
+// 全局中间件
 func registerGlobalMiddleWare(router *gin.Engine) {
 	router.Use(
 		middlewares.Logger(),   //自定义请求响应中间件

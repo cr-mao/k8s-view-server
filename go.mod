@@ -4,7 +4,6 @@ go 1.22
 
 require (
 	github.com/gin-gonic/gin v1.7.7
-	github.com/google/martian v2.1.0+incompatible
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d
 	github.com/spf13/cast v1.5.1
 	github.com/spf13/viper v1.12.0
@@ -29,7 +28,6 @@ require (
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
-	github.com/google/gnostic v0.5.7-v3refs // indirect
 	github.com/google/gnostic-models v0.6.8 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect

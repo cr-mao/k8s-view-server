@@ -82,7 +82,7 @@ func MicrosecondsStr(elapsed time.Duration) string {
 	return fmt.Sprintf("%.3fms", float64(elapsed.Nanoseconds())/1e6)
 }
 
-//int64元素是否在切片中
+// int64元素是否在切片中
 func ElementInt64InSlice(a int64, c []int64) bool {
 	for i := 0; i < len(c); i++ {
 		if a == c[i] {

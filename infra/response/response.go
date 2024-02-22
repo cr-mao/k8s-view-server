@@ -16,7 +16,7 @@ type ResponseAES struct {
 	Data string `json:"data"`
 }
 
-//失败响应函数,禁止调用下一层函数
+// 失败响应函数,禁止调用下一层函数
 func ErrorAbort(c *gin.Context, errCode errcode.ErrCode, msg ...string) {
 	defaultMsg := errCode.Desc
 	if len(msg) > 0 {
@@ -29,7 +29,7 @@ func ErrorAbort(c *gin.Context, errCode errcode.ErrCode, msg ...string) {
 	})
 }
 
-//成功响应函数
+// 成功响应函数
 func Success(c *gin.Context, errCode errcode.ErrCode, data interface{}) {
 
 	c.JSON(errCode.HTTPCode, Response{
@@ -39,7 +39,7 @@ func Success(c *gin.Context, errCode errcode.ErrCode, data interface{}) {
 	})
 }
 
-//失败响应函数
+// 失败响应函数
 func Error(c *gin.Context, errCode errcode.ErrCode, msg ...string) {
 	defaultMsg := errCode.Desc
 	if len(msg) > 0 {
