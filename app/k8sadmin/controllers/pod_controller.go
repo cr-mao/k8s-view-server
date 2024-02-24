@@ -39,8 +39,8 @@ func (c *PodController) CreateOrUpdate(ctx *gin.Context) {
 
 // 删除pod
 func (c *PodController) DeletePod(ctx *gin.Context) {
-	namespace := ctx.Param("namespace")
-	name := ctx.Param("name")
+	namespace := ctx.Query("namespace")
+	name := ctx.Query("name")
 	err := services.PodService.DeletePod(ctx, namespace, name)
 	if err != nil {
 		response.ErrorAbort(ctx, errcode.ErrCodes.ErrInternalServer, err.Error())

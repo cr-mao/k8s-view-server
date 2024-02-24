@@ -9,8 +9,10 @@ package services
 
 import (
 	"github.com/cr-mao/k8s-view-server/app/k8sadmin/services/namespace"
+	"github.com/cr-mao/k8s-view-server/app/k8sadmin/services/node"
 	"github.com/cr-mao/k8s-view-server/app/k8sadmin/services/pod"
 )
 
 var NamespaceService = &namespace.NameSpaceService{}
 var PodService = &pod.PodService{}
+var NodeService = &node.NodeService{}

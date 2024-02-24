@@ -8,7 +8,7 @@ go mod download
 cd cmd/k8sviewserver && go run main.go --env=local
 # or 等价上面
 # make serve 
-# make help to see all 
+# make help
 ```
 
 ### 注意事项
