@@ -8,9 +8,9 @@ Desc: namespace_controller.go
 package controllers
 
 import (
+	"github.com/cr-mao/k8s-view-server/app/k8sadmin/services"
 	"github.com/gin-gonic/gin"
 
-	"github.com/cr-mao/k8s-view-server/app/k8sadmin/services/namespace"
 	"github.com/cr-mao/k8s-view-server/infra/errcode"
 	"github.com/cr-mao/k8s-view-server/infra/response"
 )
@@ -19,8 +19,7 @@ type NamespaceController struct{}
 
 // 命名空间列表
 func (cc *NamespaceController) GetNamespaceList(ctx *gin.Context) {
-	service := &namespace.NameSpaceService{}
-	res, err := service.GetNameSpaceList(ctx)
+	res, err := services.NamespaceService.GetNameSpaceList(ctx)
 	if err != nil {
 		response.ErrorAbort(ctx, errcode.ErrCodes.ErrInternalServer, err.Error())
 		return
