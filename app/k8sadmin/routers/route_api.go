@@ -12,6 +12,7 @@ func RegisterAPIRoutes(r *gin.Engine) {
 	namespaceController := &controllers.NamespaceController{}
 	podController := &controllers.PodController{}
 	nodeController := &controllers.NodeController{}
+	configMapController := &controllers.ConfigMapController{}
 
 	// 命名空间列表
 	group.GET("/namespace_list", namespaceController.GetNamespaceList)
@@ -21,9 +22,8 @@ func RegisterAPIRoutes(r *gin.Engine) {
 	group.GET("/pod_delete", podController.DeletePod)
 	// pod detail
 
-	////node 调度，
+	//******************node调度************************//
 	// node详情 /node/detail?node_name=xxx
-
 	group.GET("/node/detail", nodeController.GetNodeDetail)
 	// node 列表
 	group.GET("/node/node_list", nodeController.GetNodeList)
@@ -33,4 +33,14 @@ func RegisterAPIRoutes(r *gin.Engine) {
 	// kubectl taint nodes k8snode1 app=app:NoSchedule
 	// kubectl taint nodes k8snode1 app=app:NoSchedule-
 	group.POST("/node/taint", nodeController.UpdateNodeTaint)
+
+	//******************ConfigMap************************//
+	// 创建或更新configmap
+	group.POST("/configmap/create_update", configMapController.CreateOrUpdateConfigMap)
+	// configmap详情 ， /configmap/detail?namespace=dev&name=testcm
+	group.GET("/configmap/detail", configMapController.GetConfigMapDetail)
+	// configmap列表  /configmap/list?namespace=dev
+	group.GET("/configmap/list", configMapController.GetConfigMapList)
+	// configmap 删除  /configmap/delete?namespace=dev&name=testcm
+	group.GET("/configmap/delete", configMapController.DeleteConfigMap)
 }
