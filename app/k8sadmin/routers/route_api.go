@@ -46,9 +46,12 @@ func RegisterAPIRoutes(r *gin.Engine) {
 	group.GET("/configmap/delete", configMapController.DeleteConfigMap)
 
 	//******************secret************************//
+	// 创建或更新secret
 	group.POST("/secret/create_update", secretController.CreateOrUpdateSecret)
-	//group.GET("/secret/detail", apiGroup.GetSecretDetail)
-	//group.GET("/secret/list", apiGroup.GetSecretDetail)
-	//group.DELETE("/secret/:namespace/:name", apiGroup.DeleteSecret)
-
+	// secret详情
+	group.GET("/secret/detail", secretController.GetSecretDetail)
+	// secret  列表
+	group.GET("/secret/list", secretController.GetSecretList)
+	// secret 删除
+	group.GET("/secret/delete", secretController.DeleteSecret)
 }
