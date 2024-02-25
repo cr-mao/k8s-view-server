@@ -8,8 +8,9 @@ Desc: dto.go
 package dto
 
 import (
-	"github.com/cr-mao/k8s-view-server/app/k8sadmin/global"
 	corev1 "k8s.io/api/core/v1"
+
+	"github.com/cr-mao/k8s-view-server/app/k8sadmin/global"
 )
 
 type Node struct {

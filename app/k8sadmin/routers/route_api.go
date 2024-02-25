@@ -13,20 +13,21 @@ func RegisterAPIRoutes(r *gin.Engine) {
 	podController := &controllers.PodController{}
 	nodeController := &controllers.NodeController{}
 	configMapController := &controllers.ConfigMapController{}
+	secretController := &controllers.SecretController{}
 
 	// 命名空间列表
-	group.GET("/namespace_list", namespaceController.GetNamespaceList)
+	group.GET("/namespace/list", namespaceController.GetNamespaceList)
 	// pod 创建更新
-	group.POST("/pod_create_update", podController.CreateOrUpdate)
+	group.POST("/pod/create_update", podController.CreateOrUpdate)
 	// 删除pod
-	group.GET("/pod_delete", podController.DeletePod)
+	group.GET("/pod/delete", podController.DeletePod)
 	// pod detail
 
 	//******************node调度************************//
 	// node详情 /node/detail?node_name=xxx
 	group.GET("/node/detail", nodeController.GetNodeDetail)
 	// node 列表
-	group.GET("/node/node_list", nodeController.GetNodeList)
+	group.GET("/node/list", nodeController.GetNodeList)
 	// node 打标签,替换的方式
 	group.POST("/node/label", nodeController.UpdateNodeLabel)
 	//  node污点设置
@@ -43,4 +44,11 @@ func RegisterAPIRoutes(r *gin.Engine) {
 	group.GET("/configmap/list", configMapController.GetConfigMapList)
 	// configmap 删除  /configmap/delete?namespace=dev&name=testcm
 	group.GET("/configmap/delete", configMapController.DeleteConfigMap)
+
+	//******************secret************************//
+	group.POST("/secret/create_update", secretController.CreateOrUpdateSecret)
+	//group.GET("/secret/detail", apiGroup.GetSecretDetail)
+	//group.GET("/secret/list", apiGroup.GetSecretDetail)
+	//group.DELETE("/secret/:namespace/:name", apiGroup.DeleteSecret)
+
 }

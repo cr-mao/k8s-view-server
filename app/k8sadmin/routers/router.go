@@ -2,6 +2,7 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
+	"time"
 
 	"github.com/cr-mao/k8s-view-server/app/k8sadmin/middlewares"
 	"github.com/cr-mao/k8s-view-server/infra/app"
@@ -21,9 +22,10 @@ func setup404Handler(r *gin.Engine) {
 // 全局中间件
 func registerGlobalMiddleWare(router *gin.Engine) {
 	router.Use(
-		middlewares.Logger(),   //自定义请求响应中间件
-		middlewares.Recovery(), //panic   错误 拦截处理
-		middlewares.Cros(),     //跨域
+		middlewares.Logger(),                   //自定义请求响应中间件
+		middlewares.Recovery(),                 //panic   错误 拦截处理
+		middlewares.Cros(),                     //跨域
+		middlewares.CtxTimeout(time.Second*10), //上下文1秒超时
 	)
 }
 
