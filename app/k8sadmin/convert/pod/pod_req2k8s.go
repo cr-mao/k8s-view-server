@@ -45,6 +45,7 @@ type Req2K8sConvert struct {
 
 // 将pod 的 请求格式的数据 转换为 k8s 结构的数据
 func (pc *Req2K8sConvert) PodReq2K8s(podReq *pod_request.Pod) *corev1.Pod {
+	nodeAffinity, nodeSelector, nodeName := getNodeK8sScheduling(podReq)
 	return &corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      podReq.Base.Name,
@@ -52,6 +53,9 @@ func (pc *Req2K8sConvert) PodReq2K8s(podReq *pod_request.Pod) *corev1.Pod {
 			Labels:    pc.getK8sLabels(podReq.Base.Labels),
 		},
 		Spec: corev1.PodSpec{
+			NodeName:       nodeName,
+			NodeSelector:   nodeSelector,
+			Affinity:       nodeAffinity,
 			InitContainers: pc.getK8sContainers(podReq.InitContainers),
 			Containers:     pc.getK8sContainers(podReq.Containers),
 			Volumes:        pc.getK8sVolumes(podReq.Volumes),
@@ -64,6 +68,48 @@ func (pc *Req2K8sConvert) PodReq2K8s(podReq *pod_request.Pod) *corev1.Pod {
 			RestartPolicy: corev1.RestartPolicy(podReq.Base.RestartPolicy),
 		},
 	}
+}
+
+func getNodeK8sScheduling(podReq *pod_request.Pod) (affinity *corev1.Affinity, nodeSelector map[string]string, nodeName string) {
+	nodeScheduling := podReq.NodeScheduling
+	switch nodeScheduling.Type {
+	case scheduling_nodename:
+		nodeName = nodeScheduling.NodeName
+		return
+	case scheduling_nodeselector:
+		nodeSelectorMap := make(map[string]string)
+		for _, item := range nodeScheduling.NodeSelector {
+			nodeSelectorMap[item.Key] = item.Value
+		}
+		nodeSelector = nodeSelectorMap
+		return
+	case scheduling_nodeaffinity:
+		nodeSelectorTermExpressions := nodeScheduling.NodeAffinity
+		matchExpression := make([]corev1.NodeSelectorRequirement, 0)
+		for _, expression := range nodeSelectorTermExpressions {
+			matchExpression = append(matchExpression, corev1.NodeSelectorRequirement{
+				Key:      expression.Key,
+				Values:   strings.Split(expression.Value, ","),
+				Operator: expression.Operator,
+			})
+		}
+		affinity = &corev1.Affinity{
+			NodeAffinity: &corev1.NodeAffinity{
+				RequiredDuringSchedulingIgnoredDuringExecution: &corev1.NodeSelector{
+					NodeSelectorTerms: []corev1.NodeSelectorTerm{
+						{
+							MatchExpressions: matchExpression,
+						},
+					},
+				},
+			},
+		}
+	case scheduling_nodeany:
+		//do nothing
+	default:
+		//do nothing
+	}
+	return
 }
 
 func (pc *Req2K8sConvert) getK8sHostAlias(podReqHostAliases []global.ListMapItem) []corev1.HostAlias {
@@ -168,9 +214,9 @@ func (pc *Req2K8sConvert) getK8sContainer(podReqContainer pod_request.Container)
 		SecurityContext: &corev1.SecurityContext{
 			Privileged: &podReqContainer.Privileged,
 		},
-		Ports: pc.getK8sPorts(podReqContainer.Ports),
-		//Env:            pc.getK8sEnv(podReqContainer.Envs),
-		//EnvFrom:        pc.getK8sEnvFrom(podReqContainer.EnvsFrom),
+		Ports:          pc.getK8sPorts(podReqContainer.Ports),
+		Env:            pc.getK8sEnv(podReqContainer.Envs),
+		EnvFrom:        pc.getK8sEnvFrom(podReqContainer.EnvsFrom),
 		VolumeMounts:   pc.getK8sVolumeMounts(podReqContainer.VolumeMounts),
 		StartupProbe:   pc.getK8sContainerProbe(podReqContainer.StartupProbe),
 		LivenessProbe:  pc.getK8sContainerProbe(podReqContainer.LivenessProbe),
@@ -294,9 +340,9 @@ func (pc *Req2K8sConvert) getK8sEnv(podReqEnv []pod_request.EnvVar) []corev1.Env
 		case ref_type_configMap:
 			envVar.ValueFrom = &corev1.EnvVarSource{
 				ConfigMapKeyRef: &corev1.ConfigMapKeySelector{
-					Key: item.Value,
+					Key: item.Value, //configmap 中的某个key
 					LocalObjectReference: corev1.LocalObjectReference{
-						Name: item.RefName,
+						Name: item.RefName, // configmap name
 					},
 				},
 			}

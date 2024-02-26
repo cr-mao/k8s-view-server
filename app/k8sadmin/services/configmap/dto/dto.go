@@ -5,7 +5,7 @@ Date: 2024/2/24 22:57
 Email: crmao@qq.com
 Desc: dto.go
 */
-package configmap
+package dto
 
 import "github.com/cr-mao/k8s-view-server/app/k8sadmin/global"
 

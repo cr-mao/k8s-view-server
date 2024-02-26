@@ -14,6 +14,9 @@ func RegisterAPIRoutes(r *gin.Engine) {
 	nodeController := &controllers.NodeController{}
 	configMapController := &controllers.ConfigMapController{}
 	secretController := &controllers.SecretController{}
+	pvController := &controllers.PvController{}
+	pvcController := &controllers.PvcController{}
+	storageClassController := &controllers.StorageClassController{}
 
 	// 命名空间列表
 	group.GET("/namespace/list", namespaceController.GetNamespaceList)
@@ -54,4 +57,27 @@ func RegisterAPIRoutes(r *gin.Engine) {
 	group.GET("/secret/list", secretController.GetSecretList)
 	// secret 删除
 	group.GET("/secret/delete", secretController.DeleteSecret)
+
+	//*******************PV***********************//
+	// 创建pv
+	group.POST("/pv/create", pvController.CreatePV)
+	//// pv
+	group.GET("/pv/list", pvController.GetPVList)
+	// pv 删除 ?name=xxx
+	group.GET("/pv/delete", pvController.DeletePV)
+
+	//*******************PVC***********************//
+	// 创建pvc
+	group.POST("/pvc/create", pvcController.CreatePVC)
+	// pvc list
+	group.GET("/pvc/list", pvcController.GetPVCList)
+	// pvc 删除 ?namespace=xx&name=xxx
+	group.GET("/pvc/delete", pvcController.DeletePVC)
+
+	group.POST("/sc/create", storageClassController.CreateSC)
+	// ?namespace=xxx
+	group.GET("/sc/list", storageClassController.GetSCList)
+	// ?name=xxx
+	group.GET("/sc/delete", storageClassController.DeleteSC)
+
 }

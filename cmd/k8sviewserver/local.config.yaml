@@ -10,6 +10,11 @@ app:
   # web server 端口
   http_host: "0.0.0.0"
 
+k8s:
+  # 支持的 provisioner 动态管理pv，pvc
+  provisioner: "cluster.local/nfs-subdir-external-provisioner"
+
+
 log:
   #日志写入级别, 开发时推荐使用 "debug" 或者 "info" ，生产环境下使用 "error"
   log_level: "info"
@@ -25,3 +30,5 @@ log:
   max_age: 7
   # 是否压缩，压缩日志不方便查看，我们设置为 false（压缩可节省空间）
   compress: false
+
+

@@ -15,6 +15,7 @@ import (
 
 	"github.com/cr-mao/k8s-view-server/app/k8sadmin/global"
 	"github.com/cr-mao/k8s-view-server/app/k8sadmin/request/configmap_request"
+	"github.com/cr-mao/k8s-view-server/app/k8sadmin/services/configmap/dto"
 )
 
 type ConfigMapService struct{}
@@ -42,7 +43,7 @@ func (s *ConfigMapService) CreateOrUpdateConfigMap(ctx context.Context, configMa
 }
 
 // 详情
-func (s *ConfigMapService) GetConfigMapDetail(ctx context.Context, namespace, name string) (*ConfigMap, error) {
+func (s *ConfigMapService) GetConfigMapDetail(ctx context.Context, namespace, name string) (*dto.ConfigMap, error) {
 	configMapK8s, err := global.KubeConfigSet.CoreV1().ConfigMaps(namespace).Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
@@ -52,14 +53,14 @@ func (s *ConfigMapService) GetConfigMapDetail(ctx context.Context, namespace, na
 }
 
 // configmap 列表
-func (s *ConfigMapService) GetConfigMapList(ctx context.Context, namespace string) ([]*ConfigMap, error) {
+func (s *ConfigMapService) GetConfigMapList(ctx context.Context, namespace string) ([]*dto.ConfigMap, error) {
 	//1 从k8s查询
 	list, err := global.KubeConfigSet.CoreV1().ConfigMaps(namespace).List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, err
 	}
 	//2 转换为res(filter)
-	configMapList := make([]*ConfigMap, 0)
+	configMapList := make([]*dto.ConfigMap, 0)
 	for _, item := range list.Items {
 		configMapList = append(configMapList, geCmReqItem(&item))
 	}
@@ -71,15 +72,15 @@ func (*ConfigMapService) DeleteConfigMap(ctx context.Context, ns string, name st
 	return global.KubeConfigSet.CoreV1().ConfigMaps(ns).Delete(ctx, name, metav1.DeleteOptions{})
 }
 
-func geCmReqDetail(configMap *corev1.ConfigMap) *ConfigMap {
+func geCmReqDetail(configMap *corev1.ConfigMap) *dto.ConfigMap {
 	detail := geCmReqItem(configMap)
 	detail.Labels = global.ToList(configMap.Labels)
 	detail.Data = global.ToList(configMap.Data)
 	return detail
 }
 
-func geCmReqItem(configMap *corev1.ConfigMap) *ConfigMap {
-	return &ConfigMap{
+func geCmReqItem(configMap *corev1.ConfigMap) *dto.ConfigMap {
+	return &dto.ConfigMap{
 		Name:      configMap.Name,
 		Namespace: configMap.Namespace,
 		DataNum:   len(configMap.Data),

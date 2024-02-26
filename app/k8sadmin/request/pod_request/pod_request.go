@@ -13,8 +13,6 @@ import (
 	"github.com/cr-mao/k8s-view-server/app/k8sadmin/global"
 )
 
-//@Author: morris
-
 type Base struct {
 	//名字
 	Name string `json:"name"`

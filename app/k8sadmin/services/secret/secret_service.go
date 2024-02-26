@@ -15,6 +15,7 @@ import (
 
 	"github.com/cr-mao/k8s-view-server/app/k8sadmin/global"
 	"github.com/cr-mao/k8s-view-server/app/k8sadmin/request/secret_request"
+	"github.com/cr-mao/k8s-view-server/app/k8sadmin/services/secret/dto"
 )
 
 type SecretService struct{}
@@ -39,7 +40,7 @@ func (s *SecretService) DeleteSecret(ctx context.Context, namespace string, name
 }
 
 // secret 详情
-func (SecretService) GetSecretDetail(ctx context.Context, namespace string, name string) (*Secret, error) {
+func (SecretService) GetSecretDetail(ctx context.Context, namespace string, name string) (*dto.Secret, error) {
 	secretK8s, err := global.KubeConfigSet.CoreV1().Secrets(namespace).Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		return nil, err
@@ -49,12 +50,12 @@ func (SecretService) GetSecretDetail(ctx context.Context, namespace string, name
 }
 
 // secret 列表
-func (SecretService) GetSecretList(ctx context.Context, namespace string) ([]Secret, error) {
+func (SecretService) GetSecretList(ctx context.Context, namespace string) ([]dto.Secret, error) {
 	list, err := global.KubeConfigSet.CoreV1().Secrets(namespace).List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, err
 	}
-	secretResList := make([]Secret, 0)
+	secretResList := make([]dto.Secret, 0)
 	for _, item := range list.Items {
 		secretRes := secretK8s2ResItemConvert(&item)
 		secretResList = append(secretResList, secretRes)
@@ -62,8 +63,8 @@ func (SecretService) GetSecretList(ctx context.Context, namespace string) ([]Sec
 	return secretResList, err
 }
 
-func secretK8s2ResItemConvert(secret *corev1.Secret) Secret {
-	return Secret{
+func secretK8s2ResItemConvert(secret *corev1.Secret) dto.Secret {
+	return dto.Secret{
 		Name:      secret.Name,
 		Namespace: secret.Namespace,
 		Type:      secret.Type,
@@ -72,8 +73,8 @@ func secretK8s2ResItemConvert(secret *corev1.Secret) Secret {
 	}
 }
 
-func secretK8s2ResDetailConvert(secret *corev1.Secret) *Secret {
-	return &Secret{
+func secretK8s2ResDetailConvert(secret *corev1.Secret) *dto.Secret {
+	return &dto.Secret{
 		Name:      secret.Name,
 		Namespace: secret.Namespace,
 		Type:      secret.Type,

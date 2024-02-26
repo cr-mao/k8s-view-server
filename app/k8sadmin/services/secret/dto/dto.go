@@ -5,7 +5,7 @@ Date: 2024/2/25 10:53
 Email: crmao@qq.com
 Desc: dto.go
 */
-package secret
+package dto
 
 import (
 	corev1 "k8s.io/api/core/v1"
